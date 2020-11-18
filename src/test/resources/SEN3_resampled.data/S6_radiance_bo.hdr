@@ -1,0 +1,14 @@
+ENVI
+description = {TOA radiance for channel S6 (B stripe grid, oblique view) - Unit: mW.m-2.sr-1.nm-1 - Wavelength: 2255.7nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 2
+interleave = bsq
+byte order = 1
+band names = { S6_radiance_bo }
+wavelength = {2255.7}
+data gain values = {7.42E-4}
+data offset values = {0.0}

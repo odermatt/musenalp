@@ -1,0 +1,107 @@
+<!--
+  ~ Copyright (C) 2017 Odermatt & Brockmann GmbH (info@odermatt-brockmann.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<html>
+<head>
+    <title>MuSenALP Processsor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">LSWT Split Window Algorithm</td>
+        <td class="header" align="right"><img src="images/snap_header.jpg" border=0></td>
+    </tr>
+</table>
+
+<h3>LSWT Split-Window Algorithm</h3>
+<p>The idea of the split-window approach is to make use of the different absorption characteristics of water vapor
+    within differential spectral windows of the thermal infrared spectra. A simple formula combining two TIR bands and
+    the view zenith angle is applied to compute the surface temperature.<br>
+    The formula can e.g. be found in the GCOS Report, which is the final report for the project "Oberflächentemperaturen
+    von Schweizer Seen aus NOAA-AVHRR Daten (1989-2010)", by Riffler and Wunderle (2012)<br>
+    <br>
+</p>
+<center>T<sub>LSWT</sub> = a<sub>0</sub>+a<sub>1</sub> BT<sub>4</sub>+a<sub>2</sub> (BT<sub>4</sub>-BT<sub>5</sub>
+    )+a<sub>3</sub> (1-sec &theta;) (BT<sub>4</sub>-BT<sub>5</sub>)
+</center>
+<br>
+<table>
+    <tr>
+        <td>a<sub>(0..3)</sub></td>
+        <td>Split-window coefficients</td>
+    </tr>
+    <tr>
+        <td>BT<sub>4,5</sub></td>
+        <td>Brightness temperature in AVHRR bands 4 (10.30 - 11.30 &mu;m) and 5 (11.50 - 12.50 &mu;m)</td>
+    </tr>
+    <tr>
+        <td>&theta;</td>
+        <td>The satellite's view zenith angle</td>
+    </tr>
+</table>
+<p>
+    <br>
+    As the zenith angle is mostly given in degree, it has to be converted to rad:<br>
+    <br>
+</p>
+<center>1 rad = <sup>&pi;</sup>/<sub>180°</sub> 1°</center>
+<p>
+    <br>
+    This results in the implemented formula<br>
+    <br>
+</p>
+<center>
+    T<sub>LSWT</sub> = a<sub>0</sub>+a<sub>1</sub> BT<sub>4</sub>+a<sub>2</sub> (BT<sub>4</sub>-BT<sub>5</sub>
+    )+a<sub>3</sub> (1-1/cos(&theta;&pi;/180° ) (BT<sub>4</sub>-BT<sub>5</sub>)
+</center>
+
+<h4>Input of coefficients</h4>
+<p>
+    The Split-Window Algorithm algorithm for calculating LSWT needs four coefficients (a<sub>0</sub> to a<sub>3</sub> in
+    the above formulas). This processor provides different possibilities to enter these coefficients:
+</p>
+<center><img src="images/split-window-input.gif" border=0></center>
+<table>
+    <tr>
+        <td>Coefficients from File</td>
+        <td>A path to a file containing the coefficients can be provided. This input has the highest priority. The
+            formatting of the file should be like shown here:
+            <img src="images/split-window-coef-file.gif" border="0"></td>
+    </tr>
+    <tr>
+        <td>Lookup-table (globally approximated coefficients)</td>
+        <td>A lookup-table (LUT) with globally approximated coefficients is provided and can be used for the
+            calculation. Checking this option has second highest priority (after providing a coefficient file). <b>needs
+                to be implemented!</b></td>
+    </tr>
+    <tr>
+        <td>Direct user input</td>
+        <td>The user can directly write the four coefficients in the provided fields. This input has the lowest
+            priority
+        </td>
+    </tr>
+</table>
+<p><br>
+    Technically it is possible to enter data in all three of these options. The selected option with the highest
+    priority will be chosen. The other inputs are ignored.<br>
+</p>
+<br>
+<hr>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# SST Coefficients for M01 from 02.07.2014 to 02.07.2014
+# Equation: SST = a0 + a1*T4 + a2*(T4 - T5) + a3*(T4-T5)*(1-SEC(ViewZenithAngle))
+#      DateJul     DateStr            a0            a1            a2            a3          STDV          BIAS             n
+2456841.000000  2014070212      1.439901      0.995912      1.951689     -0.706211      0.133513      0.008240         48354

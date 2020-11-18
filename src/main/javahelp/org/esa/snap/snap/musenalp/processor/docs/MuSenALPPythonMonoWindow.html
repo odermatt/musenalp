@@ -1,0 +1,50 @@
+<!--
+  ~ Copyright (C) 2017 Odermatt & Brockmann GmbH (info@odermatt-brockmann.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<html>
+<head>
+    <title>MuSenALP Processsor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">LSWT Mono Window Algorithm</td>
+        <td class="header" align="right"><img src="images/snap_header.jpg" border=0></td>
+    </tr>
+</table>
+
+<h3>LSWT Mono-Window Algorithm</h3>
+<p>With this algorithm a linear regression is used to calculate LSWT from one band of brightness temperature. </p>
+<center>T<sub>LSWT</sub> = a<sub>0</sub> BT + a<sub>1</sub>
+</center>
+<br>
+<p>To reach the highest possible quality for this approach for each observation the radiative transfer needs to be
+    calculated. For this calculation, the RTTOV and the current atmospheric conditions are necessary. This depends on
+    access to RTTOV and NRT at ECMWF. Both is not given in this processor. </p>
+<p>Therefore, look-up tables (LUT) for mean atmospheric states, 5° steps for view angles and different elevations were
+    calculated. The user only needs to enter the approximate elevation of the desired target area.</p>
+<p>Additionally, it is possible to directly enter the coefficients a<sub>0</sub> and a<sub>1</sub> in the GUI in the
+    fields "coefficient a0 (mono-window)" and "coefficient a1 (mono-window)". If data is entered here, the LUT will not
+    be used.</p>
+<br>
+<center><img src="images/mono-window-input.gif" border=0></center>
+<br>
+<hr>
+</body>
+</html>

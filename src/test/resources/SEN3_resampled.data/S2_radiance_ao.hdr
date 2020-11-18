@@ -1,0 +1,14 @@
+ENVI
+description = {TOA radiance for channel S2 (A stripe grid, oblique view) (500 m) - Unit: mW.m-2.sr-1.nm-1 - Wavelength: 659.47nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 2
+interleave = bsq
+byte order = 1
+band names = { S2_radiance_ao }
+wavelength = {659.47}
+data gain values = {0.0145}
+data offset values = {0.0}

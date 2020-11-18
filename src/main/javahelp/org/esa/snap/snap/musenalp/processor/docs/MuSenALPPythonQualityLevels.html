@@ -1,0 +1,175 @@
+<!--
+  ~ Copyright (C) 2017 Odermatt & Brockmann GmbH (info@odermatt-brockmann.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<html>
+<head>
+    <title>MuSenALP Processsor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">MuSenALP GUI Parameters</td>
+        <td class="header" align="right"><img src="images/snap_header.jpg" border=0></td>
+    </tr>
+</table>
+
+<h3>MuSenALP Quality Flags and Levels</h3>
+<p>For each pixel the processor is calculating quality flags. These quality flags are combined to form eight quality
+    levels. The flags and levels used are described in found in the GCOS Report [2], which is the final report for the
+    project "Oberflächentemperaturen von Schweizer Seen aus NOAA-AVHRR Daten (1989-2010)", by Riffler and Wunderle
+    (2012) </p>
+<h4>Quality Flags</h4>
+<center>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Bit position</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>cloud_mask</td>
+            <td>1</td>
+            <td>Application of cloud mask</td>
+        </tr>
+        <tr>
+            <td>VIS_cloud</td>
+            <td>2</td>
+            <td>remove non detetable cloud cover by using threshold (NIR< 0.08)</td>
+        </tr>
+        <tr>
+            <td>NIR_VIS_ratio</td>
+            <td>4</td>
+            <td>ratio of reflectance for NIR and VIS (threshold 1.0)</td>
+        </tr>
+        <tr>
+            <td>land_water_mask</td>
+            <td>8</td>
+            <td>application of land/water mask</td>
+        </tr>
+        <tr>
+            <td>GROSS_IR_Valid_VIS</td>
+            <td>16</td>
+            <td>the radiation temperature of channel T4 (AVHRR) needs to be bigger than -10°C</td>
+        </tr>
+        <tr>
+            <td>LSWT_in_range</td>
+            <td>32</td>
+            <td>Creating final product, limiting data to -5°C to +35°C</td>
+        </tr>
+        <tr>
+            <td>Excluded_singel_pixels</td>
+            <td>64</td>
+            <td>Valid pixels only those which are not completely surrounded by nonvaliddata according to [1]
+            </td>
+        </tr>
+        <tr>
+            <td>SZA_gr_55</td>
+            <td>128</td>
+            <td>Use only pixels for satelite zenith angle <= 55°</td>
+        </tr>
+        <tr>
+            <td>Spatial_STDV_gr_3</td>
+            <td>256</td>
+            <td>Valid pixels only those which sourrounding pixels have a SDEV from lower 3°C according to [1]
+            </td>
+        </tr>
+        <tr>
+            <td>SZA_gr_45</td>
+            <td>512</td>
+            <td>Use only pixels for satelite zenith angle <= 45°</td>
+        </tr>
+        <tr>
+            <td>Spatial_STDV_gr_1.5</td>
+            <td>1024</td>
+            <td>Valid pixels only those which sourrounding pixels have a SDEV from lower 1.5°C according to [1]
+            </td>
+        </tr>
+        <tr>
+            <td>Glint_Angle_le_36</td>
+            <td>2048</td>
+            <td>Use only pixels with glint angle > 36°</td>
+        </tr>
+    </table>
+</center>
+<h4>Quality Levels</h4>
+Analog to [2] the quality flags are grouped to nine quality levels:
+<center><img src="images/quality-levels.gif" border="0"></center>
+This translates to the following bitmasks (in integer):
+<center>
+    <table>
+        <tr>
+            <th>Quality Level</th>
+            <th>Bitmask</th>
+        </tr>
+        <tr>
+            <td>Q0</td>
+            <td>any of last 8 bit != 0</td>
+        </tr>
+        <tr>
+            <td>Q1</td>
+            <td>256</td>
+        </tr>
+        <tr>
+            <td>Q2</td>
+            <td>1536</td>
+        </tr>
+        <tr>
+            <td>Q3</td>
+            <td>2560</td>
+        </tr>
+        <tr>
+            <td>Q4</td>
+            <td>3072</td>
+        </tr>
+        <tr>
+            <td>Q5</td>
+            <td>2048</td>
+        </tr>
+        <tr>
+            <td>Q6</td>
+            <td>512</td>
+        </tr>
+        <tr>
+            <td>Q7</td>
+            <td>1024</td>
+        </tr>
+        <tr>
+            <td>Q8</td>
+            <td>0</td>
+        </tr>
+    </table>
+</center>
+<br>
+<table>
+    <tr>
+        <td>
+            [1] Schwab, D. J., G. A., Leshkevich, and G. C. Muhr, 1999: Automated mapping of surface water temperature
+            in the Great Lakes. J. Great Lakes Res., 25, 468-481.
+        </td>
+    </tr>
+    <tr>
+        <td>
+            [2] Riffler, M., and Wunderle, S. (2012). Oberflächentemperaturen von Schweizer Seen aus NOAA-AVHRR Daten
+            (1989 - 2010) (Berne, Switzerland (in German): Remote Sensing Research Group, University of Berne).
+        </td>
+    </tr>
+</table>
+<hr>
+</body>
+</html>

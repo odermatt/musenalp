@@ -1,0 +1,14 @@
+ENVI
+description = {TOA radiance for channel S4 (TDI stripe grid, nadir view) - Unit: mW.m-2.sr-1.nm-1 - Wavelength: 1374.8nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 2
+interleave = bsq
+byte order = 1
+band names = { S4_radiance_cn }
+wavelength = {1374.8}
+data gain values = {0.003452}
+data offset values = {0.0}

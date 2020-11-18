@@ -1,0 +1,14 @@
+ENVI
+description = {Gridded pixel brightness temperature for channel S9 (1km TIR grid, oblique view) (1 km) - Unit: K - Wavelength: 12022.5nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 2
+interleave = bsq
+byte order = 1
+band names = { S9_BT_io }
+wavelength = {12022.5}
+data gain values = {0.01}
+data offset values = {283.73}

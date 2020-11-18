@@ -1,0 +1,39 @@
+<filesystem>
+
+    <folder name="Actions">
+        <folder name="Operators">
+            <file name="PyMuSenALPOpAction.instance">
+                <attr name="instanceCreate"
+                      methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="delegate" methodvalue="org.esa.snap.core.gpf.ui.DefaultOperatorAction.create"/>
+                <!--<attr name="delegate" methodvalue="org.esa.snap.musenalp.CustomOperatorAction.create"/>-->
+                <attr name="operatorName" stringvalue="musenalp_op"/>
+                <attr name="displayName" stringvalue="MuSenALP LSWT Processor"/>
+                <attr name="dialogTitle" stringvalue="MuSenALP LSWT Processor"/>
+                <attr name="helpId" stringvalue="pyMuSenALPDoc"/>  <!--The helpId if help contents is provided-->
+                <attr name="targetProductNameSuffix" stringvalue="_musenalp"/>
+                <attr name="ShortDescription" stringvalue="The MuSenALP Processor takes remote sensing data from various satellite instruments as input and generates image products containing Lake Surface Water Temperature (LSWT) plus quality indicators as output."/>
+            </file>
+        </folder>
+    </folder>
+
+    <folder name="Menu">
+        <folder name="Thermal">
+            <attr name="position" intvalue="500"/>
+            <folder name="MuSenAlp">
+                <file name="PyMuSenALPOpAction.shadow">
+                    <attr name="originalFile" stringvalue="Actions/Operators/PyMuSenALPOpAction.instance"/>
+                    <attr name="position" intvalue="0"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+
+    <folder name="Services">
+        <folder name="JavaHelp">
+            <file name="helpset.xml" url="helpset.xml">
+                <attr name="position" intvalue="4800"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

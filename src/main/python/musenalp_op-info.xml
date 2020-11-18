@@ -1,0 +1,220 @@
+<!-- This XML file describes the interface of the python operator. It defines the required source product(s) and the parameters
+     for the processing. By using the information of this file the graphical user interface is automatically generated and also
+     the help on the command line is derived from the information provided here.
+-->
+<operator>
+    <!-- The name uniquely identifies the operator within SNAP -->
+    <name>org.esa.snap.python.MuSenAlp</name>
+    <!-- The alias is a more user-friendly name, e.g. to be used on the command line -->
+    <alias>musenalp_op</alias>
+    <operatorClass>org.esa.snap.python.gpf.PyOperator</operatorClass>
+
+    <version>1.0.6</version>
+    <authors>Odermatt &amp; Brockmann GmbH</authors>
+    <copyright>Copyright (C) 2017 Odermatt &amp; Brockmann GmbH</copyright>
+
+    <description>
+        The MuSenALP Processor takes remote sensing data from various satellite instruments as input and generates image
+        products containing Lake Surface Water Temperature (LSWT) plus quality indicators as output. The processor works
+        on single input data files, corresponding to one overflight of the satellite on a given day and time (so called
+        L1 products), and generates one corresponding LSWT output file (so called L2 products).
+    </description>
+
+    <namedSourceProducts>
+        <!-- One or more source products can be specified.
+             In the GUI only one is currently supported. On the command line multiple source products
+             can be specified by referencing them with the here defined names.
+         -->
+        <sourceProduct>
+            <name>source</name>
+        </sourceProduct>
+    </namedSourceProducts>
+
+    <parameters>
+        <parameter>
+            <name>sattype</name>
+            <label>Type of Sensor</label>
+            <description>Sensor from which data is provided</description>
+            <dataType>java.lang.String</dataType>
+            <defaultValue>AVHRR</defaultValue>
+            <valueSet>AVHRR,SLSTR,TIRS,VIIRS,AATSR</valueSet>
+            <notEmpty>true</notEmpty>
+        </parameter>
+        <parameter>
+            <name>refImage</name>
+            <description>Reference Image, necessary for AVHRR.</description>
+            <label>reference image (AVHRR)</label>
+            <dataType>java.io.File</dataType>
+        </parameter>
+        <parameter>
+            <name>geometricData</name>
+            <description>Source of geometric data, necessary for AVHRR</description>
+            <label>geometric data (AVHRR)</label>
+            <dataType>java.io.File</dataType>
+        </parameter>
+        <parameter>
+            <name>productCloudMask</name>
+            <description>Additional file or product containing a cloud mask</description>
+            <label>cloud mask: optional additional product</label>
+            <dataType>java.io.File</dataType>
+        </parameter>
+        <parameter>
+            <name>bandCloudMask</name>
+            <description>Band containing a cloud mask</description>
+            <label>                    mask or band</label>
+            <dataType>java.lang.String</dataType>
+        </parameter>
+        <parameter>
+            <name>productLandWaterMask</name>
+            <description>Additional file or product containing a land water mask</description>
+            <label>land-water mask: optional additional product</label>
+            <dataType>java.io.File</dataType>
+        </parameter>
+        <parameter>
+            <name>bandLandWaterMask</name>
+            <description>Band containing a land water mask</description>
+            <label>                             mask or band</label>
+            <dataType>java.lang.String</dataType>
+        </parameter>
+        <parameter>
+            <name>calculateLwm</name>
+            <description>use a SNAP internal operator to calculate a Land-Water-Mask</description>
+            <label>Calculate LWM</label>
+            <dataType>boolean</dataType>
+        </parameter>
+        <parameter>
+            <name>maskBeforeCalculation</name>
+            <label>Apply Masks before calculation</label>
+            <description>If checked, LSWT will not be calculated for values masked by clouds or land.</description>
+            <dataType>boolean</dataType>
+            <defaultValue>True</defaultValue>
+        </parameter>
+        <parameter>
+            <name>validPixelExpression</name>
+            <description>Band maths expression which defines valid pixels. If the expression is empty, all pixels will
+                be considered as valid.
+            </description>
+            <label>Valid Pixel Expression</label>
+            <dataType>java.lang.String</dataType>
+        </parameter>
+        <parameter>
+            <name>algorithm</name>
+            <label>Algorithm</label>
+            <description>Algorithm that should be used for LSWT calculation</description>
+            <dataType>java.lang.String</dataType>
+            <defaultValue>split-window</defaultValue>
+            <valueSet>split-window,mono-window</valueSet>
+            <notEmpty>true</notEmpty>
+        </parameter>
+        <parameter>
+            <name>coef-file</name>
+            <label>File Coefficients (Prio 1, split-window)</label>
+            <description>Coefficients for the split-window algorithm will be read from a file</description>
+            <dataType>java.io.File</dataType>
+        </parameter>
+        <parameter>
+            <name>lut</name>
+            <label>LUT for split-window coefficients (Prio 2)</label>
+            <description>If checked, the global LUT for split-window coefficients will be used.</description>
+            <dataType>boolean</dataType>
+            <defaultValue>False</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a0</name>
+            <label>coefficient a0 (split-window)</label>
+            <description>Coefficient for the split-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a1</name>
+            <label>coefficient a1 (split-window)</label>
+            <description>Coefficient for the split-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a2</name>
+            <label>coefficient a2 (split-window)</label>
+            <description>Coefficient for the split-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a3</name>
+            <label>coefficient a3 (split-window)</label>
+            <description>Coefficient for the split-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>height</name>
+            <label>elevation (mono-window)</label>
+            <description>Surface elevation of target area. This is used for the lookup in the LUT.
+                To reach the highest possible quality for this approach for each observation the radiative
+                transfer needs to be calculated. For this calculation, the RTTOV and the current atmospheric
+                conditions are necessary. This depends on access to RTTOV and NRT at ECMWF. Both is not given
+                here. If you have this calculated data, please enter it as manual coefficents.</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a0-mono</name>
+            <label>coefficient a0 (mono-window)</label>
+            <description>Coefficient for the mono-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>a1-mono</name>
+            <label>coefficient a1 (mono-window)</label>
+            <description>Coefficient for the mono-window algorithm</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>cut</name>
+            <label>Subset of result (AVHRR)</label>
+            <description>The result should be cut to a subset (e.g. for one lake), working for AVHRR, for other sensors
+                please use the build in Subset-Operator of SNAP
+            </description>
+            <dataType>boolean</dataType>
+            <defaultValue>False</defaultValue>
+        </parameter>
+        <parameter>
+            <name>poix</name>
+            <label>POI X (AVHRR)</label>
+            <description>x coordinate of Point of Interest</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>poiy</name>
+            <label>POI Y (AVHRR)</label>
+            <description>y coordinate of Point of Interest</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>padding</name>
+            <label>Padding (AVHRR)</label>
+            <description>padding around POI</description>
+            <dataType>double</dataType>
+            <defaultValue>0</defaultValue>
+        </parameter>
+        <parameter>
+            <name>optional</name>
+            <label>Add additional optional bands</label>
+            <description>Add optional bands to the target product</description>
+            <dataType>boolean</dataType>
+            <defaultValue>False</defaultValue>
+        </parameter>
+        <parameter>
+            <name>optionalBands</name>
+            <description>List of optinal bands</description>
+            <label>list of optional bands</label>
+            <dataType>java.lang.String</dataType>
+        </parameter>
+    </parameters>
+
+</operator>

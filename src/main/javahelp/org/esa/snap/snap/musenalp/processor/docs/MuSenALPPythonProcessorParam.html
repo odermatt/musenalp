@@ -1,0 +1,323 @@
+<!--
+  ~ Copyright (C) 2017 Odermatt & Brockmann GmbH (info@odermatt-brockmann.de)
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU General Public License as published by the Free
+  ~ Software Foundation; either version 3 of the License, or (at your option)
+  ~ any later version.
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT
+  ~ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  ~ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  ~ more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along
+  ~ with this program; if not, see http://www.gnu.org/licenses/
+  -->
+
+<html>
+<head>
+    <title>MuSenALP Processsor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<table class="header">
+    <tr class="header">
+        <td class="header">MuSenALP GUI Parameters</td>
+        <td class="header" align="right"><img src="images/snap_header.jpg" border=0></td>
+    </tr>
+</table>
+
+<h3>MuSenALP Gui Parameters</h3>
+<center><img src="images/processor-parameter.gif" border="0"></center>
+<p>Parameters need to be entered in the GUI of the processor. </p>
+<h4>Type of Sensor</h4>
+<p>The type of sensor of the source product can be chosen. Depending on this choice the bands used for the calculation
+    will be chosen. For some of the sensors it is necessary to load additional files with auxillary data. The different
+    sensors, the chosen bands and the auxillary data, if any, can be found in the table below.
+</p>
+<p>The sensor gives the information which bands should be used for the calculation of LSWT and the quality flags. Each
+    sensor has different names for the relevant bands.
+    The relevant bands are:
+</p>
+<center>
+    <table>
+        <tr>
+            <th> Band</th>
+            <th>Description</th>
+            <th>AHVRR channel number</th>
+        </tr>
+        <tr>
+            <td> BT1</td>
+            <td>Lower band of brightness temperature used for split-window LSWT calculation</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td> BT2</td>
+            <td>Upper band of brightness temperature used for split-window LSWT calculation</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>BT mono</td>
+            <td>Band of brightness temperature used for mono-window LSWT calculations</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td> BT extra</td>
+            <td>Additional band of brightness temperature, could be used in quality calculations</td>
+            <td>3
+            </td>
+        </tr>
+        <tr>
+            <td> RT1</td>
+            <td>Visible band, used in quality calculation</td>
+            <td>1
+            </td>
+        </tr>
+        <tr>
+            <td> RT2</td>
+            <td>NIR band, used in quality calculation</td>
+            <td>2
+            </td>
+        </tr>
+        <tr>
+            <td> Sat_ZA</td>
+            <td>The satellite's view zenith angle, used in calculation of LSWT and quality</td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td> Sun_ZA</td>
+            <td>The sun's zenith angle, used in quality calculation</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td> Rel_AZ</td>
+            <td>The relative azimuth angle between sun and satellite, used in quality calculation</td>
+            <td></td>
+        </tr>
+    </table>
+</center>
+<br>
+<center>
+    <table>
+        <tr>
+            <th>Senor</th>
+            <th>Possible algorithms</th>
+            <th>Bands</th>
+            <th>Aucillary data and explanation</th>
+        </tr>
+        <tr>
+            <td>AVHRR (Uni Bern)</td>
+            <td>split-window & mono-window</td>
+            <td>BT1 = Band_4_BT____[K_x_10] * 0.1<br>
+                BT2 = Band_5_BT____[K_x_10] * 0.1<br>
+                BT mono = Band_4_BT____[K_x_10] * 0.1<br>
+                BT extra = Band_3B_BT___[K_x_10] * 0.1<br>
+                RT1 = Band_1_RTOA__[x_1000] * 0.001<br>
+                RT2 = Band_2_RTOA__[x_1000] * 0.001<br>
+                Sat_ZA = GD Satellite_Zenith___[°_x_100] * 0.01<br>
+                Sun_ZA = GD Sun_Zenith_________[°_x_100] * 0.01<br>
+                Rel_AZ = GD Relative_Azimuth___[°_x_100] * 0.01
+            </td>
+            <td>Additional files needed for computations:
+                <ul>
+                    <li>Reference image: for geolocation</li>
+                    <li>Geometric data: for view angles (GD)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>SLSTR</td>
+            <td>split-window & mono-window</td>
+            <td>BT1= S8_BT_in<br>
+                BT2= S9_BT_in<br>
+                BT mono = S8_BT_in<br>
+                BT extra= S7_BT_in<br>
+                RT1= S2_radiance_an<br>
+                RT2= S3_radiance_an<br>
+                Sat_ZA= sat_zenith_tn<br>
+                Sun_ZA= solar_zenith_tn<br>
+                Rel_AZ= sat_azimuth_tn - solar_azimuth_tn mod 180
+            </td>
+            <td>
+                <ul>
+                    <li>Glint angle is calculated by difference of sat_azimuth and solar_azimuth. Results seems smooth,
+                        irregularity around flight area of satellite
+                    </li>
+                    <li>Radiances of RT1 and RT2 are converted to reflectance using metadata values</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>TIRS</td>
+            <td>split-window</td>
+            <td>BT1=thermal_infrared_(tirs)_1<br>
+                BT2= thermal_infrared_(tirs)_2<br>
+                BT extra=swir_1<br>
+                RT1=red<br>
+                RT2=near_infrared<br>
+                Sat_ZA=Metadata: ROLL_ANGLE<br>
+                Sun_ZA=Metadata: SUN_ELEVATTION<br>
+                Rel_AZ=sat_azimuth - sun_azimuth mod 180
+            </td>
+            <td>
+                <ul>
+                    <li>satellite azimuth angle: By using WRS system , the corners of each observation can be determined
+                        by using the Metadata WRS_ROW and WRS_PATH. This is used to calculate the azimuth angle.
+                    </li>
+                    <li>Sun azimuth angle: metadata: SUN_AZIMUTH</li>
+                    <li>Thermal bands BT1 and BT2 are converted from radiance to Kelvin using metadata values</li>
+                    <li>Radiances of RT1 and RT2 are converted to reflectance using metadata values</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>VIIRS</td>
+            <td>mono-window</td>
+            <td>BT mono = VIIRS-I5-SDR_All.BrightnessTemperature * 0.01<br>
+                RT1 = VIIRS-I1-SDR_All.Reflectance<br>
+                RT2 = VIIRS-I2-SDR_All.Reflectance<br>
+                Sat_ZA = VIIRS-IMG-GEO-TC_All.SatelliteZenithAngle<br>
+                Sun_ZA = VIIRS-IMG-GEO-TC_All.SolarZenithAngle<br>
+                Sun_AZ = VIIRS-IMG-GEO-TC_All.SolarAzimuthAngle<br>
+                Sat_AZ = VIIRS-IMG-GEO-TC_All.SatelliteAzimuthAngle
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>AATSR</td>
+            <td>split-window & mono-window</td>
+            <td>BT1 = btemp_nadir_1100<br>
+                BT2 = btemp_nadir_1200<br>
+                BT mono = btemp_nadir_1200<br>
+                BT extra = btemp_nadir_0370<br>
+                RT1 = reflec_nadir_0670<br>
+                RT2 = reflec_nadir_0870<br>
+                Sat_ZA = 90° - view_elev_nadir<br>
+                Sun_ZA = 90° - sun_elev_nadir<br>
+                Rel_AZ = view_azimuth_nadir - sun_azimuth_nadir mod 180
+            </td>
+            <td>
+                <ul>
+                    <li>Glint angle is calculated by difference of sat_azimuth and solar_azimuth. Results seems smooth,
+                        irregularity around flight area of satellite
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</center>
+<p>These bands are configured in the processor itself. It is possible to change this configuration. To do this </p>
+<ol>
+    <li>Create a file named "&lt;sensor name&gt;.ini" in your user home directory (e.g. Windows: C:\Users\&lt;user&gt;,
+        Unix: /home/&lt;user&gt;)
+    </li>
+    <li>In this file define the necessary bands and angle definitions in the following form:<br>
+        <p class="ini">
+            <code>[bands]<br>
+                lower_band = S8_BT_in<br>
+                upper_band = S9_BT_in<br>
+                lowest_band = S7_BT_in<br>
+                visible_band = S2_radiance_an<br>
+                nir_band = S3_radiance_an<br>
+                mono_band = S8_BT_in<br>
+                <br>
+                [angles]<br>
+                sat_za = sat_zenith_tn<br>
+                sun_za = solar_zenith_tn<br>
+                sun_az = solar_azimuth_tn<br>
+                sat_az = sat_azimuth_tn<br>
+                <br>
+                [scale_factors]<br>
+                scale_factor_deg = 1<br>
+                scale_factor_K = 1<br>
+                scale_rf = 1<br>
+                <br>
+                [algorithms]<br>
+                lswt-algorithm = 'both'
+            </code>
+        </p>
+    </li>
+    <li>Restart SNAP. Now the newly defined bands will be used for the calculations.</li>
+</ol>
+<h4>Cloud mask</h4>
+<p>To add a cloud mask two input fields are available:</p>
+<table>
+    <tr>
+        <td>cloud mask: optional additional product</td>
+        <td>If your mask or band containing the data for cloud recognition is not part of the source product, an
+            additional product can be entered here. <br>This field is optional. If there is a product entered the
+            resolution of the bands needs to be the same as for the source product.
+        </td>
+    </tr>
+    <tr>
+        <td>cloud mask: mask or band</td>
+        <td>Here the mask or band or band math expression containing the data for cloud recognition can be entered.
+            Masks and bands from the
+            source product or from the additional product entered in the field above are possible.
+        </td>
+    </tr>
+</table>
+<p>If no source for a cloud mask is entered the target product will be treated as if there were clouds at all pixels.
+    This will lead to a low quality index.</p>
+<h4>Land-water mask</h4>
+<p>Analog to the cloud mask, the land-water mask has two input fields, too.</p>
+<table>
+    <tr>
+        <td>land-water mask: optional additional product</td>
+        <td>If your mask or band containing the data for water recognition is not part of the source product, an
+            additional product can be entered here. <br>This field is optional. If there is a product entered the
+            resolution of the bands needs to be the same as for the source product.
+        </td>
+    </tr>
+    <tr>
+        <td>land-water mask: mask or band</td>
+        <td>Here the mask or band or band math expression containing the data for water recognition can be entered.
+            Masks and bands from the
+            source product or from the additional product entered in the field above are possible.
+        </td>
+    </tr>
+    <tr>
+        <td>Calculate LWM</td>
+        <td>If no land-water mask is given for the source it is possible to check this option. The SNAP
+            internal LandWaterMask Operator is then used to first calculate a land water mask and then use this newly
+            created mask for calculation of the quality levels.
+        </td>
+    </tr>
+</table>
+<p>If no source for a land-water mask is entered and the option "Calculate LWM" is not checked the target product will
+    be treated as if there was land on all pixels. This will lead to a low quality index.</p>
+<h4>Apply Masks before calculation</h4>
+<p>As it can take some time for this processor to run (especially if the coefficients are calculated by LUT), it can
+    speed up the process to only calculate the pixels that are not masked out by land-water- or cloud-mask. If this
+    checkbox is checked LSWT is calculated only for not masked pixels. It can be unchecked if LSWT should be calculated
+    for all pixels.</p>
+<p>As a standard this checkbox is marked.</p>
+<h4>Valid Pixel Expression</h4>
+<p>In this field it is possible to enter a band, mask or bandmath expression to define which pixels should be valid. All
+    non valid pixels will be set to NaN, LSWT will not be calculated for these pixels.</p>
+<p> An empyt value for this field
+    will evaluate to "True", i.e. all pixels will be valid.</p>
+<h4>Algorithm</h4>
+<p>This processor can calculate LSWT using two different algorithms: The split-window algorithm and the mono-window
+    algorithm.</p>
+<p>The split-window algorithm uses the data of two channels with brightness temperatures, the mono-window algorithm only
+    of one channel.</p>
+<p>Detailed information regarding the coefficients and input values can be found <a
+        href="MuSenALPPythonSplitWindow.html">here for the split-window algorithm</a> and <a
+        href="MuSenALPPythonMonoWindow.html">here for the mono-window algorithm</a>.</p>
+<h4>Subset</h4>
+<p>It is possible to specify a point of interest and the padding that should be applied into each direction. If this
+    option is selected, the LSWT and quality masks will only be calculated in this area. The target product will only
+    contain this subset of the data. </p>
+<p>At the moment, this is implemented for the AVHRR sensor. For other sensors, the already implemented subset processor
+    of SNAP can be used in preprocessing. </p>
+<h4>Additional option bands</h4>
+<p>The user can choose an option to add additional bands from the source product to the target product. </p>
+<p>The additional bands have to be added separated by semicolon (;)</p>
+<br>
+<hr>
+</body>
+</html>

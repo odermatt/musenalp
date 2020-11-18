@@ -1,0 +1,14 @@
+ENVI
+description = {toa_radiance_status_flag (500 m) - Unit: 1 - Wavelength: 554.27nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 1
+interleave = bsq
+byte order = 1
+band names = { S1_exception_an }
+wavelength = {554.27}
+data gain values = {1.0}
+data offset values = {0.0}

@@ -1,0 +1,14 @@
+ENVI
+description = {TOA radiance for channel S1 (A stripe grid, oblique view) (500 m) - Unit: mW.m-2.sr-1.nm-1 - Wavelength: 554.27nm}
+samples = 1500
+lines = 1200
+bands = 1
+header offset = 0
+file type = ENVI Standard
+data type = 2
+interleave = bsq
+byte order = 1
+band names = { S1_radiance_ao }
+wavelength = {554.27}
+data gain values = {0.01785}
+data offset values = {0.0}
